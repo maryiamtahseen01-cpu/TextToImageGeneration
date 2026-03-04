@@ -1,0 +1,9 @@
+# .env file
+AI_API_KEY=your_actual_api_key_here
+AI_API_URL=https://api.openai.com/v1/images/generations
+AI_API_MODEL=dall-e-3
+
+# Other environment variables
+SECRET_KEY=your-secret-key-for-flask
+JWT_SECRET_KEY=your-jwt-secret-key
+MONGO_URI=mongodb://localhost:27017/imaginify

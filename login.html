@@ -1,0 +1,1118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imaginify AI - Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+    <style>
+        body {
+            background: linear-gradient(135deg, #4f5369 0%, #4f5369 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px;
+        }
+        /* Loading Spinner */
+        
+        .loading-spinner {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        /* Floating Art */
+        
+        .floating-art {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        .art-1 {
+            width: 150px;
+            height: 150px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+        
+        .art-2 {
+            width: 100px;
+            height: 100px;
+            bottom: 20%;
+            right: 10%;
+            animation-delay: -5s;
+        }
+        
+        .art-3 {
+            width: 80px;
+            height: 80px;
+            top: 60%;
+            left: 15%;
+            animation-delay: -10s;
+        }
+        
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-30px) rotate(120deg);
+            }
+            66% {
+                transform: translateY(15px) rotate(240deg);
+            }
+        }
+        /* Login Container */
+        
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        .login-left,
+        .login-right {
+            padding: 40px;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .login-left {
+            background: linear-gradient(135deg, rgba(151, 69, 140, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+            color: rgb(3, 3, 3);
+        }
+        
+        .login-right {
+            background: #f0ecef;
+            color: rgb(3, 3, 3);
+        }
+        /* Logo */
+        
+        .logo {
+            margin-bottom: 30px;
+        }
+        
+        .logo-robot-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .robot-logo-main {
+            position: relative;
+            width: 60px;
+            height: 60px;
+        }
+        
+        .logo-robot-head {
+            width: 40px;
+            height: 25px;
+            background: #658066;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            margin: 0 auto;
+            top: 5px;
+        }
+        
+        .logo-robot-antenna {
+            width: 2px;
+            height: 15px;
+            background: #FF9800;
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .logo-antenna-heart {
+            width: 8px;
+            height: 8px;
+            background: #FF4081;
+            border-radius: 50%;
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: heartbeat 1.5s infinite;
+        }
+        
+        .logo-robot-eyes {
+            display: flex;
+            gap: 8px;
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .logo-eye {
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+        
+        .logo-robot-mouth {
+            width: 12px;
+            height: 2px;
+            background: white;
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .logo-robot-body {
+            width: 50px;
+            height: 30px;
+            background: #2196F3;
+            border-radius: 10px;
+            margin: 0 auto;
+        }
+        
+        .logo-floating-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .logo-floating-heart {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #FF4081;
+            border-radius: 50%;
+            animation: float-heart 3s infinite ease-in-out;
+        }
+        
+        .logo-floating-heart:nth-child(1) {
+            top: 10px;
+            left: 10px;
+            animation-delay: 0s;
+        }
+        
+        .logo-floating-heart:nth-child(2) {
+            top: 20px;
+            right: 15px;
+            animation-delay: -1s;
+        }
+        
+        .logo-floating-heart:nth-child(3) {
+            bottom: 15px;
+            left: 20px;
+            animation-delay: -2s;
+        }
+        
+        .logo-text {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(45deg, #FF4081, #FF9800);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        /* Welcome Section */
+        
+        .welcome-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-text {
+            font-size: 16px;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        /* Feature List */
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-list li:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .feature-list i {
+            font-size: 24px;
+            color: #FF9800;
+            min-width: 30px;
+        }
+        
+        .feature-robot-icon {
+            width: 24px;
+            height: 24px;
+            background: #6c8d6d;
+            border-radius: 5px;
+            position: relative;
+        }
+        
+        .feature-robot-icon::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            top: 4px;
+            left: 8px;
+        }
+        
+        .feature-list strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .feature-list .small {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        /* Links */
+        
+        .hover-robot {
+            color: white;
+            text-decoration: none;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .hover-robot:hover {
+            color: #FF4081;
+            text-decoration: underline;
+        }
+        /* Right Side Styles */
+        
+        .login-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .login-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        /* Form Styles */
+        
+        .form-label {
+            font-weight: 600;
+            color: #444;
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-control {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 12px 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        /* Login Button */
+        
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            color: white;
+        }
+        /* Divider */
+        
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e0e0e0;
+        }
+        
+        .divider span {
+            background: white;
+            padding: 0 20px;
+            color: #666;
+            font-size: 14px;
+            position: relative;
+        }
+        /* Social Login */
+        
+        .social-login {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .social-btn {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            font-weight: 600;
+            color: #444;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-2px);
+            border-color: #667eea;
+        }
+        
+        .google-btn:hover {
+            background: #DB4437;
+            color: white;
+            border-color: #DB4437;
+        }
+        
+        .github-btn:hover {
+            background: #333;
+            color: white;
+            border-color: #333;
+        }
+        /* Footer */
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .robot-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .robot-link:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+        
+        .btn-outline-light {
+            border: 2px solid #667eea;
+            color: #667eea;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-light:hover {
+            background: #667eea;
+            color: white;
+        }
+        /* Modal */
+        
+        .modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            border: none;
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-close-white {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+        /* Animations */
+        
+        @keyframes heartbeat {
+            0%,
+            100% {
+                transform: translateX(-50%) scale(1);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.3);
+            }
+        }
+        
+        @keyframes blink {
+            0%,
+            45%,
+            55%,
+            100% {
+                height: 6px;
+            }
+            50% {
+                height: 1px;
+            }
+        }
+        
+        @keyframes float-heart {
+            0%,
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-20px);
+                opacity: 0.5;
+            }
+        }
+        /* Custom Alert */
+        
+        .custom-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-width: 300px;
+            max-width: 400px;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+            border-left: 5px solid;
+        }
+        
+        .alert-success {
+            border-left-color: #4CAF50;
+        }
+        
+        .alert-warning {
+            border-left-color: #FF9800;
+        }
+        
+        .alert-danger {
+            border-left-color: #F44336;
+        }
+        
+        .alert-info {
+            border-left-color: #2196F3;
+        }
+        
+        .alert-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            margin-left: 15px;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        /* Responsive */
+        
+        @media (max-width: 992px) {
+            .login-left,
+            .login-right {
+                min-height: auto;
+                padding: 30px;
+            }
+            .login-card .row>div {
+                width: 100%;
+            }
+            .social-login {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .login-left,
+            .login-right {
+                padding: 20px;
+            }
+            .welcome-title {
+                font-size: 24px;
+            }
+            .login-title {
+                font-size: 22px;
+            }
+            .custom-alert {
+                min-width: auto;
+                width: calc(100% - 40px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Floating background art -->
+    <div class="floating-art art-1"></div>
+    <div class="floating-art art-2"></div>
+    <div class="floating-art art-3"></div>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="row g-0">
+                <!-- Left side with welcome message -->
+                <div class="col-lg-6">
+                    <div class="login-left">
+                        <div class="logo">
+                            <div class="logo-robot-container">
+                                <div class="robot-logo-main">
+                                    <div class="logo-robot-head">
+                                        <div class="logo-robot-antenna">
+                                            <div class="logo-antenna-heart"></div>
+                                        </div>
+                                        <div class="logo-robot-eyes">
+                                            <div class="logo-eye"></div>
+                                            <div class="logo-eye"></div>
+                                        </div>
+                                        <div class="logo-robot-mouth"></div>
+                                    </div>
+                                    <div class="logo-robot-body"></div>
+                                    <div class="logo-floating-hearts">
+                                        <div class="logo-floating-heart"></div>
+                                        <div class="logo-floating-heart"></div>
+                                        <div class="logo-floating-heart"></div>
+                                    </div>
+                                </div>
+                                <div class="logo-text">Imaginify AI</div>
+                            </div>
+                        </div>
+
+                        <h1 class="welcome-title">Welcome Back! 🤖✨</h1>
+                        <p class="welcome-text">
+                            Continue your creative journey with Imaginify AI. Your friendly robot assistant is here to help you create amazing art from your imagination!
+                        </p>
+
+                        <ul class="feature-list">
+                            <li>
+                                <i class="bi bi-lightning-charge"></i>
+                                <div>
+                                    <strong>Access your gallery</strong>
+                                    <div class="small">View and manage all your previous creations</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="feature-robot-icon"></div>
+                                <div>
+                                    <strong>Robot Assistant</strong>
+                                    <div class="small">Get help from our friendly AI robot</div>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="bi bi-infinity"></i>
+                                <div>
+                                    <strong>Unlock premium features</strong>
+                                    <div class="small">Get access to all styles and editing tools</div>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <div class="mt-4">
+                            <p>New to Imaginify AI? <a href="index.html" class="text-white fw-bold hover-robot">Explore the homepage 🎨</a> to see what you can create.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right side with login form -->
+                <div class="col-lg-6">
+                    <div class="login-right">
+                        <h2 class="login-title">🤖 Login to Your Account</h2>
+                        <p class="login-subtitle">Enter your credentials to access your dashboard</p>
+
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">
+                                    <i class="bi bi-envelope me-2"></i>Email Address
+                                </label>
+                                <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">
+                                    <i class="bi bi-lock me-2"></i>Password
+                                </label>
+                                <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                            </div>
+
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="rememberMe">
+                                <label class="form-check-label" for="rememberMe">Remember me</label>
+                                <a href="#" class="float-end robot-link" id="forgotPasswordLink">Forgot password?</a>
+                            </div>
+
+                            <button type="submit" class="btn btn-login">
+                                <i class="bi bi-robot me-2"></i> Sign In
+                            </button>
+
+                            <div class="divider">
+                                <span>Or continue with</span>
+                            </div>
+
+                            <div class="social-login">
+                                <button type="button" class="social-btn google-btn" id="googleLoginBtn">
+                                    <i class="bi bi-google"></i> Google
+                                </button>
+                                <button type="button" class="social-btn github-btn" id="githubLoginBtn">
+                                    <i class="bi bi-github"></i> GitHub
+                                </button>
+                            </div>
+
+                            <div class="login-footer">
+                                <p>Don't have an account? <a href="#" id="signupLink" class="robot-link">Sign up now 🚀</a></p>
+                                <button class="btn btn-outline-light mt-2 w-100" id="showSignupForm" type="button">
+                                    <i class="bi bi-plus-circle me-2"></i>Create New Account
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL for signup -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signupModalLabel">
+                        <i class="bi bi-robot me-2"></i>Join Imaginify AI
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="signupForm">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-person me-2"></i>Full Name
+                            </label>
+                            <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-envelope me-2"></i>Email
+                            </label>
+                            <input type="email" class="form-control" id="signupEmail" placeholder="your@email.com" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-phone me-2"></i>Phone Number
+                            </label>
+                            <input type="tel" class="form-control" id="signupPhone" placeholder="+92 300 1234567">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-lock me-2"></i>Password
+                            </label>
+                            <input type="password" class="form-control" id="signupPassword" placeholder="Create a password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-lock-fill me-2"></i>Confirm Password
+                            </label>
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm password" required>
+                        </div>
+                        <button type="submit" class="btn btn-login w-100">
+                            <i class="bi bi-robot me-2"></i>Create Account
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <p class="small text-center w-100">By signing up, you agree to our Terms & Privacy Policy</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add robot character
+            const loginLeft = document.querySelector('.login-left');
+            if (loginLeft) {
+                const robotChar = document.createElement('div');
+                robotChar.className = 'login-robot-character';
+                robotChar.innerHTML = '🤖';
+                robotChar.style.fontSize = '100px';
+                robotChar.style.textAlign = 'center';
+                robotChar.style.lineHeight = '120px';
+                loginLeft.appendChild(robotChar);
+            }
+
+            // DOM Elements
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const showSignupFormBtn = document.getElementById('showSignupForm');
+            const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+            const googleLoginBtn = document.getElementById('googleLoginBtn');
+            const githubLoginBtn = document.getElementById('githubLoginBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const signupLink = document.getElementById('signupLink');
+
+            // Check for existing session
+            const loggedIn = localStorage.getItem('imaginifyLoggedIn');
+            const userEmail = localStorage.getItem('imaginifyUserEmail');
+
+            if (loggedIn === 'true' && userEmail) {
+                document.getElementById('email').value = userEmail;
+                document.getElementById('rememberMe').checked = true;
+            }
+
+            // Function to show alerts
+            function showAlert(message, type = 'info') {
+                const existingAlert = document.querySelector('.custom-alert');
+                if (existingAlert) existingAlert.remove();
+
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `custom-alert alert-${type}`;
+                alertDiv.innerHTML = `
+                    <div><i class="bi ${type === 'success' ? 'bi-check-circle' : type === 'warning' ? 'bi-exclamation-triangle' : type === 'danger' ? 'bi-x-circle' : 'bi-info-circle'} me-2"></i>${message}</div>
+                    <button class="alert-close">&times;</button>
+                `;
+
+                document.body.appendChild(alertDiv);
+
+                alertDiv.querySelector('.alert-close').addEventListener('click', function() {
+                    alertDiv.remove();
+                });
+
+                setTimeout(() => {
+                    if (alertDiv.parentNode) alertDiv.remove();
+                }, 5000);
+            }
+
+            // Function to show/hide loading spinner
+            function showLoading(show) {
+                loadingSpinner.style.display = show ? 'flex' : 'none';
+            }
+
+            // Handle login form submission
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+
+                if (!email || !password) {
+                    showAlert('Email and password are required', 'warning');
+                    return;
+                }
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showAlert('Please enter a valid email address', 'warning');
+                    return;
+                }
+
+                showLoading(true);
+
+                try {
+                    // Make API call to backend for authentication
+                    const response = await fetch('http://localhost:5000/api/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            password: password
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.token) {
+                        showAlert('✅ Login successful!', 'success');
+                        
+                        // Save all data to localStorage including the JWT token
+                        localStorage.setItem('imaginifyLoggedIn', 'true');
+                        localStorage.setItem('imaginifyUserEmail', email);
+                        localStorage.setItem('imaginifyUserName', data.user?.name || email.split('@')[0]);
+                        localStorage.setItem('imaginifyUserId', data.user?.id || Date.now().toString());
+                        localStorage.setItem('imaginifyToken', data.token); // Save the JWT token
+                        
+                        showLoading(false);
+                        
+                        // Wait 2 seconds then redirect
+                        setTimeout(() => {
+                            window.location.href = 'index.html?login=true&t=' + Date.now();
+                        }, 1500);
+                    } else {
+                        throw new Error(data.error || 'Login failed');
+                    }
+                } catch (error) {
+                    showLoading(false);
+                    showAlert('⚠️ Using demo login', 'info');
+
+                    // For demo login, create a mock token
+                    localStorage.setItem('imaginifyLoggedIn', 'true');
+                    localStorage.setItem('imaginifyUserEmail', email);
+                    localStorage.setItem('imaginifyUserName', email.split('@')[0]);
+                    localStorage.setItem('imaginifyUserId', Date.now().toString());
+                    localStorage.setItem('imaginifyToken', 'demo_token_' + Date.now()); // Demo token for testing
+
+                    setTimeout(() => {
+                        window.location.href = 'index.html?login=true';
+                    }, 1000);
+                }
+            });
+
+            // Show signup modal
+            showSignupFormBtn.addEventListener('click', function() {
+                var signupModal = new bootstrap.Modal(document.getElementById('signupModal'));
+                signupModal.show();
+            });
+
+            // Signup link click handler
+            signupLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                var signupModal = new bootstrap.Modal(document.getElementById('signupModal'));
+                signupModal.show();
+            });
+
+            // Handle signup form submission
+            signupForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const fullName = document.getElementById('fullName').value.trim();
+                const email = document.getElementById('signupEmail').value.trim();
+                const phone = document.getElementById('signupPhone').value.trim();
+                const password = document.getElementById('signupPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                // Validation
+                if (!fullName || !email || !password || !confirmPassword) {
+                    showAlert('Please fill in all required fields', 'warning');
+                    return;
+                }
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showAlert('Please enter a valid email address', 'warning');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    showAlert('Password must be at least 6 characters', 'warning');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    showAlert('Passwords do not match', 'warning');
+                    return;
+                }
+
+                showLoading(true);
+
+                try {
+                    // Make API call to backend for registration
+                    const response = await fetch('http://localhost:5000/api/auth/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name: fullName,
+                            email: email,
+                            password: password,
+                            phone: phone
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.token) {
+                        showAlert('✅ Registration successful!', 'success');
+                        
+                        // Save all data to localStorage including the JWT token
+                        localStorage.setItem('imaginifyLoggedIn', 'true');
+                        localStorage.setItem('imaginifyUserEmail', email);
+                        localStorage.setItem('imaginifyUserName', data.user?.name || fullName);
+                        localStorage.setItem('imaginifyUserId', data.user?.id || Date.now().toString());
+                        localStorage.setItem('imaginifyToken', data.token); // Save the JWT token
+                        
+                        var signupModal = bootstrap.Modal.getInstance(document.getElementById('signupModal'));
+                        if (signupModal) {
+                            signupModal.hide();
+                        }
+                        
+                        showLoading(false);
+                        
+                        // Redirect to homepage
+                        setTimeout(() => {
+                            window.location.href = 'index.html?login=true';
+                        }, 1500);
+                    } else {
+                        throw new Error(data.error || 'Registration failed');
+                    }
+                } catch (error) {
+                    showLoading(false);
+                    showAlert('⚠️ Registration failed. Using demo mode...', 'warning');
+
+                    // Fallback to local registration
+                    localStorage.setItem('imaginifyLoggedIn', 'true');
+                    localStorage.setItem('imaginifyUserEmail', email);
+                    localStorage.setItem('imaginifyUserName', fullName);
+                    localStorage.setItem('imaginifyUserId', Date.now().toString());
+                    localStorage.setItem('imaginifyToken', 'demo_token_' + Date.now()); // Demo token for testing
+
+                    const userProfile = {
+                        fullName: fullName,
+                        email: email,
+                        phone: phone || '+92 300 1234567',
+                        password: '••••••••',
+                        joinDate: new Date().toLocaleDateString('en-US', {
+                            month: 'long',
+                            year: 'numeric'
+                        }),
+                        creations: 0
+                    };
+                    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+
+                    var signupModal = bootstrap.Modal.getInstance(document.getElementById('signupModal'));
+                    if (signupModal) {
+                        signupModal.hide();
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
+                }
+            });
+
+            // Handle social login buttons
+            googleLoginBtn.addEventListener('click', function() {
+                showAlert('🤖 Google login coming soon!', 'info');
+            });
+
+            githubLoginBtn.addEventListener('click', function() {
+                showAlert('🤖 GitHub login coming soon!', 'info');
+            });
+
+            // Handle forgot password
+            forgotPasswordLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showAlert('🤖 Password reset functionality coming soon!', 'info');
+            });
+
+            // Ensure homepage link works
+            const homepageLink = document.querySelector('a[href="index.html"]');
+            if (homepageLink) {
+                homepageLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = 'index.html';
+                });
+            }
+
+            // Show welcome message
+            setTimeout(() => {
+                showAlert('🤖 Welcome to Imaginify AI Login!', 'info');
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>

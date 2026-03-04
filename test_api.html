@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test - Imaginify AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        
+        .status.loading {
+            background: #FFF3CD;
+            color: #856404;
+        }
+        
+        .status.success {
+            background: #D4EDDA;
+            color: #155724;
+        }
+        
+        .status.error {
+            background: #F8D7DA;
+            color: #721C24;
+        }
+        
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+        }
+        
+        .test-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 5px;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .endpoint {
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Imaginify AI - API Testing</h1>
+        <p>Test your backend API connection</p>
+        
+        <div id="connectionStatus" class="status loading">
+            ⏳ Checking server connection...
+        </div>
+
+        <!-- Health Check -->
+        <div class="test-section">
+            <h2>1. Health Check</h2>
+            <span class="endpoint">GET /api/health</span>
+            <button onclick="testHealth()">Test Health Endpoint</button>
+            <pre id="healthResult">Click the button to test...</pre>
+        </div>
+
+        <!-- Register -->
+        <div class="test-section">
+            <h2>2. Register New User</h2>
+            <span class="endpoint">POST /api/auth/register</span>
+            <input type="text" id="regName" placeholder="Full Name" value="Test User">
+            <input type="email" id="regEmail" placeholder="Email" value="test@example.com">
+            <input type="password" id="regPassword" placeholder="Password" value="password123">
+            <button onclick="testRegister()">Register User</button>
+            <pre id="registerResult">Fill the form and click register...</pre>
+        </div>
+
+        <!-- Login -->
+        <div class="test-section">
+            <h2>3. Login</h2>
+            <span class="endpoint">POST /api/auth/login</span>
+            <input type="email" id="loginEmail" placeholder="Email" value="test@example.com">
+            <input type="password" id="loginPassword" placeholder="Password" value="password123">
+            <button onclick="testLogin()">Login</button>
+            <pre id="loginResult">Fill the form and click login...</pre>
+        </div>
+
+        <!-- Profile -->
+        <div class="test-section">
+            <h2>4. Get Profile (Protected Route)</h2>
+            <span class="endpoint">GET /api/profile</span>
+            <p><small>Note: You need to login first to get a token</small></p>
+            <button onclick="testProfile()">Get Profile</button>
+            <pre id="profileResult">Login first, then test this endpoint...</pre>
+        </div>
+
+        <!-- History -->
+        <div class="test-section">
+            <h2>5. Get History (Protected Route)</h2>
+            <span class="endpoint">GET /api/history</span>
+            <button onclick="testHistory()">Get History</button>
+            <pre id="historyResult">Login first, then test this endpoint...</pre>
+        </div>
+
+        <!-- Subscription Endpoints -->
+        <div class="test-section">
+            <h2>6. Create Subscription (Protected Route)</h2>
+            <span class="endpoint">POST /api/subscription</span>
+            <select id="subPlan">
+                <option value="starter">Starter ($0/month)</option>
+                <option value="pro">Pro ($19/month)</option>
+                <option value="enterprise">Enterprise ($49/month)</option>
+            </select>
+            <button onclick="testCreateSubscription()">Subscribe to Plan</button>
+            <pre id="subscriptionResult">Login first, then test this endpoint...</pre>
+        </div>
+
+        <!-- Get Subscription -->
+        <div class="test-section">
+            <h2>7. Get User Subscription</h2>
+            <span class="endpoint">GET /api/subscription</span>
+            <button onclick="testGetSubscription()">Get My Subscription</button>
+            <pre id="getSubscriptionResult">Login first, then test this endpoint...</pre>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5000/api';
+        let authToken = '';
+
+        // Check server connection on load
+        window.onload = async function() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`);
+                const data = await response.json();
+                
+                const statusDiv = document.getElementById('connectionStatus');
+                if (response.ok) {
+                    statusDiv.className = 'status success';
+                    statusDiv.innerHTML = '✅ Server is running! ' + data.message;
+                } else {
+                    statusDiv.className = 'status error';
+                    statusDiv.innerHTML = '❌ Server is running but has issues';
+                }
+            } catch (error) {
+                const statusDiv = document.getElementById('connectionStatus');
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = '❌ Cannot connect to server. Make sure backend is running on http://localhost:5000';
+            }
+        };
+
+        async function testHealth() {
+            const resultDiv = document.getElementById('healthResult');
+            resultDiv.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`);
+                const data = await response.json();
+                
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testRegister() {
+            const resultDiv = document.getElementById('registerResult');
+            resultDiv.textContent = 'Loading...';
+            
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.token) {
+                    authToken = data.token;
+                    resultDiv.textContent = 'Success! Token saved.\n\n' + JSON.stringify(data, null, 2);
+                } else {
+                    resultDiv.textContent = JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testLogin() {
+            const resultDiv = document.getElementById('loginResult');
+            resultDiv.textContent = 'Loading...';
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.token) {
+                    authToken = data.token;
+                    resultDiv.textContent = 'Success! Token saved for protected routes.\n\n' + JSON.stringify(data, null, 2);
+                } else {
+                    resultDiv.textContent = JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testProfile() {
+            const resultDiv = document.getElementById('profileResult');
+            resultDiv.textContent = 'Loading...';
+            
+            if (!authToken) {
+                resultDiv.textContent = 'Error: Please login first to get an authentication token!';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/profile`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const data = await response.json();
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testHistory() {
+            const resultDiv = document.getElementById('historyResult');
+            resultDiv.textContent = 'Loading...';
+            
+            if (!authToken) {
+                resultDiv.textContent = 'Error: Please login first to get an authentication token!';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/history`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const data = await response.json();
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testCreateSubscription() {
+            const resultDiv = document.getElementById('subscriptionResult');
+            resultDiv.textContent = 'Loading...';
+            
+            if (!authToken) {
+                resultDiv.textContent = 'Error: Please login first to get an authentication token!';
+                return;
+            }
+            
+            const plan = document.getElementById('subPlan').value;
+            const prices = { starter: 0, pro: 19, enterprise: 49 };
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/subscription`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        plan: plan,
+                        price: prices[plan],
+                        billing_cycle: 'monthly',
+                        features: ['Feature 1', 'Feature 2', 'Feature 3']
+                    })
+                });
+                
+                const data = await response.json();
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testGetSubscription() {
+            const resultDiv = document.getElementById('getSubscriptionResult');
+            resultDiv.textContent = 'Loading...';
+            
+            if (!authToken) {
+                resultDiv.textContent = 'Error: Please login first to get an authentication token!';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/subscription`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const data = await response.json();
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
